@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Boutique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .hero {
+            position: relative;
+            padding: 60px 0;
+            text-align: center;
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+        }
+        .animated-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            z-index: -2;
+        }
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 123, 255, 0.4) 100%);
+            z-index: -1;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-weight: 700;
+            animation: fadeInUp 1s ease-out;
+        }
+        .highlight {
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-whatsapp {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .btn-whatsapp:hover {
+            background: linear-gradient(45deg, #1ea952, #0e6b5c);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+        }
+        .btn:hover {
+            animation: pulse 0.5s ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .products {
+            padding: 60px 0;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+        }
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+        }
+        .product-slider {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .product-image.active {
+            display: block;
+        }
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+        }
+        .slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .slider-dot.active {
+            background: #25D366;
+        }
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-arrow.prev {
+            left: 10px;
+        }
+        .slider-arrow.next {
+            right: 10px;
+        }
+        .product-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .product-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+        .old-price {
+            font-size: 1rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+        .whatsapp-float::before {
+            content: "💬";
+            font-size: 1.5rem;
+        }
+
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">👗 Fashion Boutique</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="animated-background"></div>
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="floating">Fashion Forward, <span class="highlight">Style Delivered</span></h1>
+                <p>Discover our latest fashion collection with trendy styles and premium quality.</p>
+                <a href="#" class="btn btn-whatsapp" onclick="openWhatsApp('general')">💬 Chat on WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="products">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Collection</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-slider" data-product="0">
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center" alt="Designer T-Shirt" class="product-image active">
+                        <img src="https://images.unsplash.com/photo-1583743814966-8936f37f82ef?w=400&h=400&fit=crop&crop=center" alt="Designer T-Shirt Back" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop&crop=center" alt="Designer T-Shirt Details" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=400&fit=crop&crop=center" alt="Designer T-Shirt Style" class="product-image">
+                        <button class="slider-arrow prev" onclick="changeSlide(0, -1)">‹</button>
+                        <button class="slider-arrow next" onclick="changeSlide(0, 1)">›</button>
+                        <div class="slider-nav">
+                            <span class="slider-dot active" onclick="currentSlide(0, 0)"></span>
+                            <span class="slider-dot" onclick="currentSlide(0, 1)"></span>
+                            <span class="slider-dot" onclick="currentSlide(0, 2)"></span>
+                            <span class="slider-dot" onclick="currentSlide(0, 3)"></span>
+                        </div>
+                    </div>
+                    <h3>Designer T-Shirt</h3>
+                    <p>Premium cotton t-shirt with modern fit and stylish design.</p>
+                    <div class="price">$45 <span class="old-price">$65</span></div>
+                    <button class="btn btn-whatsapp" onclick="orderProduct('Designer T-Shirt', '$45')">
+                        💬 Order on WhatsApp
+                    </button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-slider" data-product="1">
+                        <img src="https://i.ibb.co/nNpy9yNC/image-name.jpg" alt="Summer Dress" class="product-image active">
+                        <img src="https://i.ibb.co/RG48bP0B/image-name.jpg" alt="Summer Dress Back" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=400&h=400&fit=crop&crop=center" alt="Summer Dress Details" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400&h=400&fit=crop&crop=center" alt="Summer Dress Style" class="product-image">
+                        <button class="slider-arrow prev" onclick="changeSlide(1, -1)">‹</button>
+                        <button class="slider-arrow next" onclick="changeSlide(1, 1)">›</button>
+                        <div class="slider-nav">
+                            <span class="slider-dot active" onclick="currentSlide(1, 0)"></span>
+                            <span class="slider-dot" onclick="currentSlide(1, 1)"></span>
+                            <span class="slider-dot" onclick="currentSlide(1, 2)"></span>
+                            <span class="slider-dot" onclick="currentSlide(1, 3)"></span>
+                        </div>
+                    </div>
+                    <h3>Summer Dress</h3>
+                    <p>Elegant floral summer dress perfect for casual outings.</p>
+                    <div class="price">$89 <span class="old-price">$120</span></div>
+                    <button class="btn btn-whatsapp" onclick="orderProduct('Summer Dress', '$89')">
+                        💬 Order on WhatsApp
+                    </button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-slider" data-product="2">
+                        <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop&crop=center" alt="Skinny Jeans" class="product-image active">
+                        <img src="https://images.unsplash.com/photo-1475178626620-a4d074967452?w=400&h=400&fit=crop&crop=center" alt="Skinny Jeans Back" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=400&fit=crop&crop=center" alt="Skinny Jeans Details" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=400&fit=crop&crop=center" alt="Skinny Jeans Style" class="product-image">
+                        <button class="slider-arrow prev" onclick="changeSlide(2, -1)">‹</button>
+                        <button class="slider-arrow next" onclick="changeSlide(2, 1)">›</button>
+                        <div class="slider-nav">
+                            <span class="slider-dot active" onclick="currentSlide(2, 0)"></span>
+                            <span class="slider-dot" onclick="currentSlide(2, 1)"></span>
+                            <span class="slider-dot" onclick="currentSlide(2, 2)"></span>
+                            <span class="slider-dot" onclick="currentSlide(2, 3)"></span>
+                        </div>
+                    </div>
+                    <h3>Skinny Jeans</h3>
+                    <p>High-quality denim jeans with perfect stretch and comfort.</p>
+                    <div class="price">$75 <span class="old-price">$95</span></div>
+                    <button class="btn btn-whatsapp" onclick="orderProduct('Skinny Jeans', '$75')">
+                        💬 Order on WhatsApp
+                    </button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-slider" data-product="3">
+                        <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop&crop=center" alt="Leather Jacket" class="product-image active">
+                        <img src="https://images.unsplash.com/photo-1520975954732-35dd22299614?w=400&h=400&fit=crop&crop=center" alt="Leather Jacket Back" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=400&h=400&fit=crop&crop=center" alt="Leather Jacket Details" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=400&h=400&fit=crop&crop=center" alt="Leather Jacket Style" class="product-image">
+                        <button class="slider-arrow prev" onclick="changeSlide(3, -1)">‹</button>
+                        <button class="slider-arrow next" onclick="changeSlide(3, 1)">›</button>
+                        <div class="slider-nav">
+                            <span class="slider-dot active" onclick="currentSlide(3, 0)"></span>
+                            <span class="slider-dot" onclick="currentSlide(3, 1)"></span>
+                            <span class="slider-dot" onclick="currentSlide(3, 2)"></span>
+                            <span class="slider-dot" onclick="currentSlide(3, 3)"></span>
+                        </div>
+                    </div>
+                    <h3>Leather Jacket</h3>
+                    <p>Premium genuine leather jacket with classic design.</p>
+                    <div class="price">$199 <span class="old-price">$280</span></div>
+                    <button class="btn btn-whatsapp" onclick="orderProduct('Leather Jacket', '$199')">
+                        💬 Order on WhatsApp
+                    </button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-slider" data-product="4">
+                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=400&fit=crop&crop=center" alt="Sneakers" class="product-image active">
+                        <img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400&h=400&fit=crop&crop=center" alt="Sneakers Side" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop&crop=center" alt="Sneakers Details" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center" alt="Sneakers Style" class="product-image">
+                        <button class="slider-arrow prev" onclick="changeSlide(4, -1)">‹</button>
+                        <button class="slider-arrow next" onclick="changeSlide(4, 1)">›</button>
+                        <div class="slider-nav">
+                            <span class="slider-dot active" onclick="currentSlide(4, 0)"></span>
+                            <span class="slider-dot" onclick="currentSlide(4, 1)"></span>
+                            <span class="slider-dot" onclick="currentSlide(4, 2)"></span>
+                            <span class="slider-dot" onclick="currentSlide(4, 3)"></span>
+                        </div>
+                    </div>
+                    <h3>Sneakers</h3>
+                    <p>Comfortable and stylish sneakers for casual wear.</p>
+                    <div class="price">$120 <span class="old-price">$150</span></div>
+                    <button class="btn btn-whatsapp" onclick="orderProduct('Sneakers', '$120')">
+                        💬 Order on WhatsApp
+                    </button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-slider" data-product="5">
+                        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop&crop=center" alt="Designer Handbag" class="product-image active">
+                        <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop&crop=center" alt="Designer Handbag Back" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1596633244334-5e91cd2b1c93?w=400&h=400&fit=crop&crop=center" alt="Designer Handbag Details" class="product-image">
+                        <img src="https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=400&fit=crop&crop=center" alt="Designer Handbag Style" class="product-image">
+                        <button class="slider-arrow prev" onclick="changeSlide(5, -1)">‹</button>
+                        <button class="slider-arrow next" onclick="changeSlide(5, 1)">›</button>
+                        <div class="slider-nav">
+                            <span class="slider-dot active" onclick="currentSlide(5, 0)"></span>
+                            <span class="slider-dot" onclick="currentSlide(5, 1)"></span>
+                            <span class="slider-dot" onclick="currentSlide(5, 2)"></span>
+                            <span class="slider-dot" onclick="currentSlide(5, 3)"></span>
+                        </div>
+                    </div>
+                    <h3>Designer Handbag</h3>
+                    <p>Elegant leather handbag with spacious compartments.</p>
+                    <div class="price">$160 <span class="old-price">$210</span></div>
+                    <button class="btn btn-whatsapp" onclick="orderProduct('Designer Handbag', '$160')">
+                        💬 Order on WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Fashion Boutique. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="whatsapp-float" onclick="openWhatsApp('floating')" title="Chat on WhatsApp"></div>
+
+    <script>
+        const WHATSAPP_NUMBER = "+1234567890"; // Replace with your actual WhatsApp number
+
+        function openWhatsApp(type, productName = '', productPrice = '') {
+            let message = '';
+            
+            switch (type) {
+                case 'general':
+                    message = "Hi! I'm interested in your fashion collection. Can you help me with styling advice?";
+                    break;
+                case 'floating':
+                    message = "Hello! I need help with fashion choices and sizing guidance.";
+                    break;
+                case 'product':
+                    message = `Hi! I'm interested in ordering the ${productName} priced at ${productPrice}. Can you help me with sizing and colors available?`;
+                    break;
+                default:
+                    message = "Hello! I'm interested in your fashion collection.";
+            }
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+
+        function orderProduct(productName, productPrice) {
+            openWhatsApp('product', productName, productPrice);
+        }
+
+        // Image slider functionality
+        let slideIndexes = [0, 0, 0, 0, 0, 0]; // Track current slide for each product
+
+        function changeSlide(productIndex, direction) {
+            const slider = document.querySelector(`[data-product="${productIndex}"]`);
+            const images = slider.querySelectorAll('.product-image');
+            const dots = slider.querySelectorAll('.slider-dot');
+
+            // Hide current image and dot
+            images[slideIndexes[productIndex]].classList.remove('active');
+            dots[slideIndexes[productIndex]].classList.remove('active');
+
+            // Update slide index
+            slideIndexes[productIndex] += direction;
+            if (slideIndexes[productIndex] >= images.length) {
+                slideIndexes[productIndex] = 0;
+            }
+            if (slideIndexes[productIndex] < 0) {
+                slideIndexes[productIndex] = images.length - 1;
+            }
+
+            // Show new image and dot
+            images[slideIndexes[productIndex]].classList.add('active');
+            dots[slideIndexes[productIndex]].classList.add('active');
+        }
+
+        function currentSlide(productIndex, slideIndex) {
+            const slider = document.querySelector(`[data-product="${productIndex}"]`);
+            const images = slider.querySelectorAll('.product-image');
+            const dots = slider.querySelectorAll('.slider-dot');
+
+            // Hide current image and dot
+            images[slideIndexes[productIndex]].classList.remove('active');
+            dots[slideIndexes[productIndex]].classList.remove('active');
+
+            // Update to new slide
+            slideIndexes[productIndex] = slideIndex;
+
+            // Show new image and dot
+            images[slideIndexes[productIndex]].classList.add('active');
+            dots[slideIndexes[productIndex]].classList.add('active');
+        }
+    </script>
+</body>
+</html>
